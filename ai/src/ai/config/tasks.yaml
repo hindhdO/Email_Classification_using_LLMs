@@ -1,0 +1,91 @@
+classification_task:
+  description: >
+    Analyze the email below using a chain-of-thought reasoning approach.
+
+    Email:
+    {email}
+
+  expected_output: >
+    A structured JSON output with the following fields:
+
+    - spam: true or false
+    - category: one of "Spam", "Urgent", "Not Urgent", or "To Read"
+    - reasoning: a step-by-step explanation showing how you reached your classification
+    - suggested_response: if the email is not spam, provide a concise response the user might send back
+
+  agent: classifier
+
+evaluation_task:
+  description: >
+    First, independently classify the email using your own judgment, based on content, tone, and intent.
+
+    Email:
+    {email}
+
+    Determine if the original classification is correct.
+    If your answer differs, explain why and suggest how it should be corrected.
+
+  expected_output: >
+    A JSON object with:
+    - verdict: "Correct", "Incorrect", or "Partially correct"
+    - explanation: step-by-step reasoning for agreement or disagreement
+    - evaluator_classification: one of "Spam", "Urgent", "Not Urgent", or "To Read"
+    - evaluator_spam: true or false
+    - suggested_correction: only if the classifier's output is wrong
+
+  agent: evaluator
+
+refine_classification_task:
+  description: >
+    You've received feedback from another agent who did their own classification of the same email.
+
+    Email:
+    {email}
+
+    Based on this feedback, update your classification if needed and explain your reasoning again.
+
+  expected_output: >
+    Only return valid JSON. Do not include explanations or extra text outside the JSON object, incorporating the feedback and improving the output if necessary.
+
+    - spam: true or false
+    - category: one of "Spam", "Urgent", "Not Urgent", or "To Read"
+    - reasoning: a step-by-step explanation showing how you reached your classification
+    - suggested_response: if the email is not spam, provide a concise response the user might send back
+
+  agent: classifier
+
+test_classification_task:
+  description: >
+    Generate {num_tests} realistic  emails from the categories with a standard length :
+    - Spam
+    - Urgent
+    - Not Urgent
+    - To Read
+
+    For each email:
+    1. Specify the expected category.
+    2. Send the email to the classifier.
+    3. Compare the predicted classification to the expected one.
+    4. Mark it as success or failure.
+    5. Explain the reasoning behind the result.
+
+    Return also a final accuracy score out of {num_tests}, and a suggestion for improvement.
+
+  expected_output: >
+    Return a JSON object with the following structure:
+    {
+      "tests": [
+        {
+          "email": "Sample email here",
+          "expected": "Urgent",
+          "predicted": "Not Urgent",
+          "success": false,
+          "reasoning": "Explain why the prediction differs from the expected result."
+        },
+        ...
+      ],
+      "score": 7,
+      "suggestion": "Improve handling of ambiguous emails related to deadlines."
+    }
+
+  agent: tester
