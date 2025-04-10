@@ -10,7 +10,7 @@ The **Smart Email Classifier** is a system that classifies, evaluates, and refin
 - Refine the classification if necessary based on evaluator feedback.
 - Generate test cases for the email classifier and evaluate its performance through various metrics like Precision, Recall, and F1-Score.
   
-The user interface is built with **Streamlit** for task orchestration and LLM-based classification and evaluation.
+The user interface is built with **Streamlit** for LLM-based classification and evaluation.
 
 ## Requirements
 
