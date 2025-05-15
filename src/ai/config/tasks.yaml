@@ -62,6 +62,12 @@ test_classification_task:
     - Not Urgent
     - To Read
 
+    Each category should represent approximately {100 // 4}% of the total.
+
+    Each email must be:
+    - Realistic in tone and content
+    - Clearly identifiable as belonging to its expected category
+
     For each email:
     1. Specify the expected category.
     2. Send the email to the classifier.
